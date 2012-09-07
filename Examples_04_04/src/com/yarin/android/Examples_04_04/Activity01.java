@@ -32,7 +32,7 @@ public class Activity01 extends Activity {
 		/* 创建ListView对象 */
 		m_ListView = new ListView(this);
 		LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 		m_ListView.setBackgroundColor(Color.BLACK);
 
@@ -44,7 +44,8 @@ public class Activity01 extends Activity {
 
 		// 获取数据库Phones的Cursor
 		Cursor cur = getContentResolver().query(
-				ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,
+				null, null);
 		startManagingCursor(cur);
 
 		// ListAdapter是ListView和后台数据的桥梁
@@ -55,7 +56,8 @@ public class Activity01 extends Activity {
 				// 数据库的Cursor对象
 				cur,
 				// 从数据库的NAME和NUMBER两列中取数据
-				new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup.NUMBER },
+				new String[] { ContactsContract.Contacts.DISPLAY_NAME,
+						ContactsContract.CommonDataKinds.Phone.NUMBER },
 				// 与NAME和NUMBER对应的Views
 				new int[] { android.R.id.text1, android.R.id.text2 });
 
