@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.PhoneLookup;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -19,6 +18,7 @@ public class Activity01 extends Activity {
 	ListView m_ListView;
 
 	/** Called when the activity is first created. */
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,6 +46,7 @@ public class Activity01 extends Activity {
 		Cursor cur = getContentResolver().query(
 				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,
 				null, null);
+		// Tom Xue: could be commented out without influence
 		startManagingCursor(cur);
 
 		// ListAdapter是ListView和后台数据的桥梁
@@ -56,7 +57,8 @@ public class Activity01 extends Activity {
 				// 数据库的Cursor对象
 				cur,
 				// 从数据库的NAME和NUMBER两列中取数据
-				new String[] { ContactsContract.Contacts.DISPLAY_NAME,
+				new String[] {
+						ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
 						ContactsContract.CommonDataKinds.Phone.NUMBER },
 				// 与NAME和NUMBER对应的Views
 				new int[] { android.R.id.text1, android.R.id.text2 });
@@ -64,14 +66,14 @@ public class Activity01 extends Activity {
 		/* 将adapter添加到m_ListView中 */
 		m_ListView.setAdapter(adapter);
 
-		/* 为m_ListView视图添加setOnItemSelectedListener监听 */
+		/* 为m_ListView视图添加setOnItemSelectedListener监听; Tom Xue: not triggered in my HTC G18 */
 		m_ListView
 				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 					@Override
 					public void onItemSelected(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-
+						// Tom Xue: arg0(parent) 	The AdapterView where the selection happened
 						DisplayToast("滚动到第"
 								+ Long.toString(arg0.getSelectedItemId()) + "项");
 					}
@@ -79,6 +81,7 @@ public class Activity01 extends Activity {
 					@Override
 					public void onNothingSelected(AdapterView<?> arg0) {
 						// 没有选中
+						DisplayToast("nothing selected now");
 					}
 				});
 
@@ -89,7 +92,7 @@ public class Activity01 extends Activity {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-						// 于对选中的项进行处理
+						// 于对选中的项进行处理, Tom Xue: arg2(The position of the view in the adapter) starts from 0
 						DisplayToast("选中了第" + Integer.toString(arg2 + 1) + "项");
 					}
 
